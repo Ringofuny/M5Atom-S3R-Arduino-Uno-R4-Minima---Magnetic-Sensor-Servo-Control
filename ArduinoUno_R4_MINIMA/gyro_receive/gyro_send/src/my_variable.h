@@ -10,11 +10,23 @@ enum data_fellow {
     ED
 };
 
-typedef struct {
-    float gyro_X;
-    float gyro_Y;
-    float gyro_Z;
-    uint16_t data[6];
-} GYRO_DATA;
+struct coordinate
+{
+    float x;
+    float y;
+    float z;
+};
+
+struct data_buffer
+{
+    int16_t data[6];
+};
+
+struct  INPUT_DATA{
+    coordinate gyro;
+    data_buffer transport;
+};
+
+
 
 #endif

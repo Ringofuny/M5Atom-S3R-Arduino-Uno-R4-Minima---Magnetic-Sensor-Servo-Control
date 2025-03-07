@@ -1,45 +1,62 @@
 #include <Arduino.h>
-#include "M5Unified.h"
+#include <M5Unified.h>
 #include "my_variable.h"
+INPUT_DATA send;
 
-GYRO_DATA send;
+#define RX_PIN 6
+#define TX_PIN 38
+#define SEND_DELAY 8
 
-void gyroData() {
-  auto data = M5.Imu.getImuData();
-  send.gyro_X = data.gyro.x * 100;  // 100倍して整数化
-  send.gyro_Y = data.gyro.y * 100;
-  send.gyro_Z = data.gyro.z * 100;
+void GYRO_Send() {
+  // for (int i = 0; i < 6; i++) {
+  //   Serial2.write(send.data[i]);
+  // }
+
+  // 送信側 (2bit)
+    Serial2.write(send.transport.data[AF]);
+    for (int i = 1; i < 4; i++) {
+      Serial2.write((int8_t)(send.transport.data[i] >> 8));  // 上位バイト
+      Serial2.write((int8_t)(send.transport.data[i] & 0xFF));  // 下位バイト
+    }
+    Serial2.write(send.transport.data[SUM]);
+    Serial2.write(send.transport.data[ED]);
+  /* // 受信側 (2bit)
+    int16_t received_value;
+    uint8_t high_byte = Serial1.read();  // 上位バイトを受信
+    uint8_t low_byte = Serial1.read();   // 下位バイトを受信
+
+    received_value = (int16_t)((high_byte << 8) | low_byte);  // 元の int16_t に復元
+  */ 
 }
 
-void sendData() {
-  send.data[AF] = 0xAF;
-  send.data[X] = (uint16_t)send.gyro_X;
-  send.data[Y] = (uint16_t)send.gyro_Y;
-  send.data[Z] = (uint16_t)send.gyro_Z;
-  send.data[SUM] = send.data[X] + send.data[Y] + send.data[Z];
-  send.data[ED] = 0xED;
+ void setup(void)
+ {
+     delay(2000);
+     auto cfg            = M5.config();
+     cfg.serial_baudrate = 115200;
+     M5.begin(cfg);
+     delay(500); // LCD の I2C 通信を安定させるための遅延
+     Serial2.begin(38400, SERIAL_8N1, RX_PIN, TX_PIN);  // UART2で外部デバイスと通信
+     pinMode(18, OUTPUT);
+     digitalWrite(18, LOW);
+     Serial.println("setup, OK");
+ }
+ 
+ void loop(void)
+ {
+    if (M5.Imu.update()) {
+      M5.Imu.getGyro(&send.gyro.x, &send.gyro.y, &send.gyro.z); // ジャイロデータ取得 
+      send.transport.data[X] = static_cast<int16_t>(send.gyro.x * 100);
+      send.transport.data[Y] = static_cast<int16_t>(send.gyro.y * 100);
+      send.transport.data[Z] = static_cast<int16_t>(send.gyro.z * 100);
+      Serial.printf("gx:%d  gy:%d  gz:%d\r\n", send.gyro.x, send.gyro.y, send.gyro.z);
 
-  for (int i = 0; i < 6; i++) {
-    Serial1.write((uint8_t)(send.data[i] >> 8));  // 上位バイト
-    Serial1.write((uint8_t)(send.data[i] & 0xFF));  // 下位バイト
-  }
-}
+      /*  データ送信  */
+      send.transport.data[AF] = 0xAF; // 先頭データ
+      send.transport.data[SUM] = send.transport.data[X] + send.transport.data[Y] + send.transport.data[Z]; // ジャイロデータ
+      send.transport.data[ED] = 0xED; // 終端データ
+      GYRO_Send();
+    }
 
-void setup(void) {
-  delay(2000);
-  auto cfg            = M5.config();
-  cfg.serial_baudrate = 115200;
-  M5.begin(cfg);
-  Serial.println("Setup OK");  // シリアル動作チェック用
-  Serial1.begin(38400, SERIAL_8N1, 5, 39);  // (RX=5, TX=39)
-  Wire.begin(45, 0, 100000);  // SDA=45, SCL=0, クロック100 kHz
-}
-
-void loop(void) {
-  auto imu_update = M5.Imu.update();
-  if (imu_update) {
-    gyroData();
-    sendData();
-    Serial.printf("gx:%2f  gy:%2f  gz:%2f\r\n", send.gyro_X / 100.0, send.gyro_Y / 100.0, send.gyro_Z / 100.0);
-  }
-}
+    delay(SEND_DELAY);
+ }
