@@ -4,7 +4,6 @@
 class data_recovery {
     public:
         receive_serial s_Serial;
-        RECEIVE_DATA received;
         bool getRecoveryData(float* x, float* y, float* z);
     private:
         int16_t data[6];
