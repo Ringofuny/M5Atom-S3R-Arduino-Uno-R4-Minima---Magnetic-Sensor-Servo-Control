@@ -1,25 +1,27 @@
 #include <Arduino.h>
+#include <HardwareSerial.h>
+#include <Wire.h>
 #include <M5Unified.h>
 #include "my_variable.h"
 INPUT_DATA send;
 
 #define RX_PIN 6
-#define TX_PIN 38
+#define TX_PIN 5
 #define SEND_DELAY 8
 
 void GYRO_Send() {
   // for (int i = 0; i < 6; i++) {
-  //   Serial2.write(send.data[i]);
+  //   Serial1.write(send.data[i]);
   // }
 
   // 送信側 (2bit)
-    Serial2.write(send.transport.data[AF]);
+    Serial1.write(send.transport.data[AF]);
     for (int i = 1; i < 4; i++) {
-      Serial2.write((int8_t)(send.transport.data[i] >> 8));  // 上位バイト
-      Serial2.write((int8_t)(send.transport.data[i] & 0xFF));  // 下位バイト
+      Serial1.write((int8_t)(send.transport.data[i] >> 8));  // 上位バイト
+      Serial1.write((int8_t)(send.transport.data[i] & 0xFF));  // 下位バイト
     }
-    Serial2.write(send.transport.data[SUM]);
-    Serial2.write(send.transport.data[ED]);
+    Serial1.write(send.transport.data[SUM]);
+    Serial1.write(send.transport.data[ED]);
   /* // 受信側 (2bit)
     int16_t received_value;
     uint8_t high_byte = Serial1.read();  // 上位バイトを受信
@@ -32,15 +34,12 @@ void GYRO_Send() {
  void setup(void)
  {
      delay(2000);
+     Serial1.begin(38400, SERIAL_8N1, 6, 5);  // (RX, TX)
      auto cfg            = M5.config();
      cfg.serial_baudrate = 115200;
      M5.begin(cfg);
-     delay(500); // LCD の I2C 通信を安定させるための遅延
-     Serial2.begin(38400, SERIAL_8N1, RX_PIN, TX_PIN);  // UART2で外部デバイスと通信
-     pinMode(18, OUTPUT);
-     digitalWrite(18, LOW);
      Serial.println("setup, OK");
- }
+    }
  
  void loop(void)
  {
@@ -49,7 +48,7 @@ void GYRO_Send() {
       send.transport.data[X] = static_cast<int16_t>(send.gyro.x * 100);
       send.transport.data[Y] = static_cast<int16_t>(send.gyro.y * 100);
       send.transport.data[Z] = static_cast<int16_t>(send.gyro.z * 100);
-      Serial.printf("gx:%d  gy:%d  gz:%d\r\n", send.gyro.x, send.gyro.y, send.gyro.z);
+      Serial.printf("gx:%d  gy:%d  gz:%d\r\n", send.transport.data[X], send.transport.data[Y], send.transport.data[Z]);
 
       /*  データ送信  */
       send.transport.data[AF] = 0xAF; // 先頭データ
