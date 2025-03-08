@@ -15,13 +15,12 @@ void GYRO_Send() {
   // }
 
   // 送信側 (2bit)
-    Serial1.write(send.transport.data[AF]);
-    for (int i = 1; i < 4; i++) {
-      Serial1.write((int8_t)(send.transport.data[i] >> 8));  // 上位バイト
-      Serial1.write((int8_t)(send.transport.data[i] & 0xFF));  // 下位バイト
+    for (int i = 0; i < 6; i++) {
+      Serial1.write((uint8_t)(send.transport.data[i] >> 8));  // 上位バイト
+      Serial1.write((uint8_t)(send.transport.data[i] & 0xFF));  // 下位バイト
     }
-    Serial1.write(send.transport.data[SUM]);
-    Serial1.write(send.transport.data[ED]);
+    Serial1.write('\r');                                      //CR
+    Serial1.write('\n');                                      //LF
   /* // 受信側 (2bit)
     int16_t received_value;
     uint8_t high_byte = Serial1.read();  // 上位バイトを受信
