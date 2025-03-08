@@ -6,12 +6,6 @@
 
 class receive_serial {
     public:
-        /*シリアルを通してFEP02からコントローラーデータを読み取る関数。
-        戻り値：失敗した場合　false/偽
-                成功した場合　true/真
-        引数：読み取れたデータを入れるサイズ11の文字列ポインター。
-                失敗した場合は、渡されたデータが変更しない。
-        */
         bool getSig(int16_t *data);
     private:
         struct data_buffer

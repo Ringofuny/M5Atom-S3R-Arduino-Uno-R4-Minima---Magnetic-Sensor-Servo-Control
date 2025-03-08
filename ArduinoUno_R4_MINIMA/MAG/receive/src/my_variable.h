@@ -24,4 +24,5 @@ struct coordinate
 
 struct RECEIVE_DATA {
     coordinate gyro;
+    coordinate mag;
 };
