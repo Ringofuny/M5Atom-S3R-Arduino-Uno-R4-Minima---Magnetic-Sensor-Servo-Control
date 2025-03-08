@@ -1,11 +1,10 @@
-#ifndef gyro_receive_serial_H
-#define gyro_receive_serial_H
+#pragma once
 
 #include <Arduino.h>
 #include <stdbool.h>
 #include "my_variable.h"
 
-class gyro_receive_serial {
+class receive_serial {
     public:
         /*シリアルを通してFEP02からコントローラーデータを読み取る関数。
         戻り値：失敗した場合　false/偽
@@ -27,5 +26,3 @@ class gyro_receive_serial {
         #define RETRY_DEF 20
         int RETRY_MAX = RETRY_DEF;
 };
-
-#endif

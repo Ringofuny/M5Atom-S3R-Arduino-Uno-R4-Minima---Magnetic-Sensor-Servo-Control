@@ -1,32 +1,11 @@
-#ifndef my_variable_h
-#define my_variable_h
+#pragma once
 
-enum data_fellow {
-    AF,
-    X,
-    Y,
-    Z,
-    SUM,
-    ED
-};
+#define MODE 2 // 1->GYRO, 2->MAG
 
-struct coordinate
-{
-    float x;
-    float y;
-    float z;
-};
-
-struct data_buffer
-{
-    int16_t data[6];
-};
-
-struct  INPUT_DATA{
-    coordinate gyro;
-    data_buffer transport;
-};
-
-
-
+#if MODE == 1
+    #include "GYRO_variable.h"
+#elif MODE == 2
+    #include "MAG_variable.h"
+#else 
+    #error "Mode error!"
 #endif

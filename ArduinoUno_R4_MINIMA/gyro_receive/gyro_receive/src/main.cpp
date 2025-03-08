@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include "gyro_receive_serial.h"
+#include "receive_serial.h"
 
-gyro_receive_serial s_Serial;
+receive_serial s_Serial;
 RECEIVE_DATA received;
 int16_t data[6];
 int fail = 0;
@@ -14,31 +14,31 @@ void setup() {
 void loop() {
     if (s_Serial.getSig(data)) {
         fail = 0;
-        received.gyro.x = data[X] / 100.0f;
-        received.gyro.y = data[Y] / 100.0f;
-        received.gyro.z = data[Z] / 100.0f;
-        // Serial.print("OK x: ");
-        // Serial.print(received.gyro.x);
+        received.gyro.x = data[indata_group::X_group] / 100.0f;
+        received.gyro.y = data[indata_group::Y_group] / 100.0f;
+        received.gyro.z = data[indata_group::Z_group] / 100.0f;
+        Serial.print("OK x: ");
+        Serial.print(received.gyro.x);
         // Serial.print(data[X]);
-        // Serial.print(" y: ");
-        // Serial.print(received.gyro.y);
+        Serial.print(" y: ");
+        Serial.print(received.gyro.y);
         // Serial.print(data[Y]);
-        // Serial.print(" z: ");
-        // Serial.println(received.gyro.z);
+        Serial.print(" z: ");
+        Serial.println(received.gyro.z);
         // Serial.println(data[Z]);
 
-        Serial.print(" 1: ");
-        Serial.print(data[AF]);
-        Serial.print(" 2: ");
-        Serial.print(data[X]);
-        Serial.print(" 3: ");
-        Serial.print(data[Y]);
-        Serial.print(" 4: ");
-        Serial.print(data[Z]);
-        Serial.print(" 5: ");
-        Serial.print(data[SUM]);
-        Serial.print(" 6: ");
-        Serial.println(data[ED]);
+        // Serial.print(" 1: ");
+        // Serial.print(data[data_fellow::AF]);
+        // Serial.print(" 2: ");
+        // Serial.print(data[data_fellow::X]);
+        // Serial.print(" 3: ");
+        // Serial.print(data[data_fellow::Y]);
+        // Serial.print(" 4: ");
+        // Serial.print(data[data_fellow::Z]);
+        // Serial.print(" 5: ");
+        // Serial.print(data[data_fellow::SUM]);
+        // Serial.print(" 6: ");
+        // Serial.println(data[data_fellow::ED]);
     } else {
         fail++;
     }
