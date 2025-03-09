@@ -71,4 +71,5 @@ bool receive_serial::getSig(int16_t *data)
     memcpy(data, &receive.transport.data_temp[1], 4 * sizeof(int16_t));
     return true;
   }
+  return false;
 }
