@@ -2,9 +2,6 @@
 #include "angle.h"
 #include "servoDrive.h"
 
-// Servo servo;
-// Servo back_servo;
-
 RECEIVE_DATA received;
 data_recovery recovery;
 
@@ -14,8 +11,6 @@ void setup() {
     Serial1.begin(38400);
     Serial.begin(115200);
     servoset();
-    // servo.attach(9);
-    // back_servo.attach(10);
 }
 
 void loop() {
@@ -31,8 +26,6 @@ void loop() {
         Serial.print(received.mag.z);
         Serial.print(" angle: ");
         Serial.println(angle);
-        // servo.write(angle);
-        // back_servo.write(fabs(180-angle));
         // 角度に応じた動作
         if (angle > 45 && angle < 135) {
             mae_move();   // 前進
