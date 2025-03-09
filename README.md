@@ -12,6 +12,9 @@ M5Atom S3R と Arduino Uno R4 Minima を使用し、磁気センサーのデー�
 - [M5Unified](https://github.com/m5stack/M5Unified)
 - [Servo](https://github.com/arduino-libraries/Servo.git)
 
+# 参考
+- [servoの動きに関して](https://github.com/RoboTakao/NX22.git)
+
 ## インストール & 使い方  
 1. 必要なライブラリをインストール  
 2. M5Atom S3R にコードを書き込み、磁気センサーのデータを送信  
