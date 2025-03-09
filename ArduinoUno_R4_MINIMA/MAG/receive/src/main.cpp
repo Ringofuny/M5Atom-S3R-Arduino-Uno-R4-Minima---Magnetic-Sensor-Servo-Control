@@ -1,20 +1,21 @@
 #include "data_recovery.h"
 #include "angle.h"
-#include <Servo.h>
-Servo servo;
-Servo back_servo;
+#include "servoDrive.h"
+
+// Servo servo;
+// Servo back_servo;
 
 RECEIVE_DATA received;
 data_recovery recovery;
 
-int16_t data[6];
 int fail = 0;
 
 void setup() {
     Serial1.begin(38400);
     Serial.begin(115200);
-    servo.attach(9);
-    back_servo.attach(10);
+    servoset();
+    // servo.attach(9);
+    // back_servo.attach(10);
 }
 
 void loop() {
@@ -30,8 +31,18 @@ void loop() {
         Serial.print(received.mag.z);
         Serial.print(" angle: ");
         Serial.println(angle);
-        servo.write(angle);
-        back_servo.write(fabs(180-angle));
+        // servo.write(angle);
+        // back_servo.write(fabs(180-angle));
+        // 角度に応じた動作
+        if (angle > 45 && angle < 135) {
+            mae_move();   // 前進
+        } else if (angle >= 135 || angle <= 45) {
+            usiro_move(); // 後退
+        } else if (angle < 45) {
+            left_move();  // 左旋回
+        } else if (angle > 135) {
+            right_move(); // 右旋回
+        }
     } else {
         fail++;
     } 
@@ -46,7 +57,8 @@ void loop() {
     | 3       4 |
     |-----------|
 
-    1,2 -> back_servo
-    3,4 -> servo
-
+    1 -> A0
+    2 -> A1
+    3 -> A2
+    4 -> A3
 */
