@@ -9,7 +9,8 @@ M5Atom S3R と Arduino Uno R4 Minima を使用し、磁気センサーのデー�
 - サーボモーター （追加予定）
 
 ## 使用ライブラリ  
-- [M5Unified](https://github.com/m5stack/M5Unified)  
+- [M5Unified](https://github.com/m5stack/M5Unified)
+- [Servo](https://github.com/arduino-libraries/Servo.git)
 
 ## インストール & 使い方  
 1. 必要なライブラリをインストール  
