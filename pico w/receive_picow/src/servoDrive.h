@@ -6,10 +6,10 @@ Servo servo2;
 Servo servo3;
 Servo servo4;
 
-const int servo1Pin = A0;
-const int servo2Pin = A1;
-const int servo3Pin = A2;
-const int servo4Pin = A3;
+const int servo1Pin = 2;
+const int servo2Pin = 3;
+const int servo3Pin = 4;
+const int servo4Pin = 5;
 
 // サーボモータ設定
 int minUs = 500;
