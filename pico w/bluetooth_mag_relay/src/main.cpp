@@ -32,10 +32,6 @@ void setup() {
   // Once ESPNow is successfully Init, we will register for recv CB to
   // get recv packer info
   esp_now_register_recv_cb(OnDataRecv);
-
-  // M5の初期化
-  auto cfg = M5.config();
-  M5.begin(cfg);
 }
 
 void loop() {

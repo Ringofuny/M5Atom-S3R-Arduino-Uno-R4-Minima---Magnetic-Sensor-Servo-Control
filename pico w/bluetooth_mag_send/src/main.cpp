@@ -1,14 +1,17 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include <Wire.h>
-#include "M5Unified.h"
+// #include "M5Unified.h"
+#include "M5AtomS3.h"
 #include "angle.h"
 
 // ターゲット（フィギュアスタンド）の MAC address
 uint8_t targetAddress[] = {0x34, 0xB7, 0xDA, 0x57, 0x39, 0xD4};
 
 typedef struct GATIsendData {
-  float angle;
+  float X;
+  float Y;
+  float Z;
 } GATIsendData;
 
 struct MAGData {
@@ -33,10 +36,16 @@ void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
   Serial.println("serial started");
- 
+  
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
   Serial.println("wifi");
+  
+  // M5Stack初期化
+  AtomS3.begin();
+  AtomS3.Imu.init();
+  // M5.Imu.begin();
+  Serial.println("M5Stack initialized");
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
@@ -64,14 +73,24 @@ void setup() {
 }
 
 void loop() {
-  if (M5.Imu.update()) {
-    M5.Imu.getMag(&mag.x, &mag.y, &mag.z); // 磁気データ取得
-    send.angle = getAngle(mag.x, mag.y); // 角度計算
+  if (AtomS3.Imu.isEnabled()) {
+    AtomS3.Imu.getMag(&mag.x, &mag.y, &mag.z); // 磁気データ取得
+    send.X = mag.x;
+    send.Y = mag.y;
+    send.Z = mag.z;
     // Send message via ESP-NOW
-    Serial.println("send");
+  } else {
+    Serial.println("IMU is not enabled");
   }
   
-  esp_err_t result = esp_now_send(targetAddress, (uint8_t *) &send, 4);
+  Serial.print("Sending: ");
+  Serial.print(send.X);
+  Serial.print(" ");
+  Serial.print(send.Y);
+  Serial.print(" ");
+  Serial.print(send.Z);
+  Serial.println(" ");
+  esp_err_t result = esp_now_send(targetAddress, (uint8_t *) &send, sizeof(send));
   
   if (result == ESP_OK) {
     Serial.println("Sent with success");
