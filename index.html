@@ -77,67 +77,74 @@
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="sidebar" id="sidebar">
-    <a href="#overview">概要</a>
-    <a href="#hardware">使用ハードウェア</a>
-    <a href="#library">使用ライブラリ</a>
-    <a href="#reference">参考</a>
-    <a href="#install">インストール & 使い方</a>
-    <a href="#controller">コントローラの向き</a>
-    <a href="#serial">シリアル通信</a>
-    <a href="#espnow">ESP-NOW通信</a>
-    <a href="#future">今後の予定</a>
+    <a href="#Arduino">Arduino Uno R4 Minima</a>
+    <a href="#picow">Raspberrypi pico w</a>
 </div>
 
 <div class="container">
-    <h1 id="overview">M5Atom S3R & Arduino Uno R4 Minima - Magnetic Sensor & Servo Control</h1>
+    <h1 id="overview">Arduino Uno R4 Minima</h1>
     <h2>概要</h2>
     <p>M5Atom S3R と Arduino Uno R4 Minima を使用し、磁気センサーのデータを送信し、サーボモーターを制御するプロジェクトです。通信方法として「シリアル通信」と「ESP-NOW通信」の2種類があります。</p>
 
-    <h2 id="hardware">使用ハードウェア</h2>
+    <h2>使用ハードウェア</h2>
     <ul>
         <li>M5Atom S3R CAM</li>
         <li>Arduino Uno R4 Minima</li>
         <li>サーボモーター （追加予定）</li>
     </ul>
 
-    <h2 id="library">使用ライブラリ</h2>
+    <h2>使用ライブラリ</h2>
     <ul>
         <li><a href="https://github.com/m5stack/M5Unified" target="_blank">M5Unified</a></li>
         <li><a href="https://github.com/arduino-libraries/Servo.git" target="_blank">Servo</a></li>
     </ul>
 
-    <h2 id="reference">参考</h2>
+    <h2>参考</h2>
     <ul>
         <li><a href="https://github.com/RoboTakao/NX22.git" target="_blank">servoの動きに関して</a></li>
     </ul>
 
-    <h2 id="install">インストール & 使い方</h2>
+    <h2>インストール & 使い方</h2>
     <ol>
         <li>必要なライブラリをインストール</li>
         <li>M5Atom S3R にコードを書き込み、磁気センサーのデータを送信</li>
         <li>Arduino Uno R4 Minima にコードを書き込み、受信データでサーボモーターを制御</li>
     </ol>
 
-    <h2 id="controller">コントローラの向き</h2>
+    <h2>コントローラの向き</h2>
     <p><img src="IMG_2422.jpg" alt="コントローラの向き" style="max-width: 100%;"></p>
     <p>あれ、、場合によっては違うな、、、</p>
 
-    <h2 id="serial">シリアル通信</h2>
-    <p>M5Atom S3R から磁気センサーのデータをシリアル通信で送信し、Arduino Uno R4 Minima 側で受信してサーボモーターを制御します。</p>
-    <pre>
-    Serial.begin(115200);  // ボーレート 115200bps
-    Serial.print("磁気センサーの値: ");
-    Serial.println(sensorValue);
-    </pre>
+    <h1 id="picow">Raspberrypi pico w</h1>
+    <p>ESP-NOW は　M5Atom S3R CAM から M5AtomS3 lite にワイヤレスでデータを送信し, シリアル通信の中継機として働きます。</p>
+    
+    <h2>使用ハードウェア</h2>
+    <ul>
+        <li>M5Atom S3R</li>
+        <li>M5Atom S3R CAM</li>
+        <li>M5AtomS3 lite</li>
+        <li>Raspberrypi pico w</li>
+        <li>サーボモーター(SG90)</li>
+    </ul>
+    
+    <h2>使用ライブラリ</h2>
+    <ul>
+        <li><a href="https://github.com/m5stack/M5Unified" target="_blank">M5Unified</a></li>
+        <li><a href="" target="_blank">Servo</a></li>
+        <li><a href="" target="_blank">esp-now</a></li>
+    </ul>
+    
+    <h2>参考</h2>
+    <ul>
+        <li><a href="https://github.com/RoboTakao/NX22.git" target="_blank">servoの動きに関して</a></li>
+    </ul>
 
-    <h2 id="espnow">ESP-NOW通信</h2>
-    <p>ESP-NOW を使い、M5Atom S3R から Arduino Uno R4 Minima にワイヤレスでデータを送信し、サーボモーターを制御します。</p>
-    <pre>
-    if (esp_now_init() != ESP_OK) {
-        Serial.println("ESP-NOW 初期化に失敗しました");
-        return;
-    }
-    </pre>
+    <h2>インストール & 使い方</h2>
+    <ol>
+        <li>必要なライブラリをインストール</li>
+        <li>それぞれにそれぞれの名前のコードを書き込み、磁気センサーのデータを送受信</li>
+        <li>受信データでサーボモーターを制御</li>
+    </ol>
 
     <h2 id="future">今後の予定</h2>
     <ul>
