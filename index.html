@@ -66,13 +66,15 @@
     <a href="#reference">参考</a>
     <a href="#install">インストール & 使い方</a>
     <a href="#controller">コントローラの向き</a>
+    <a href="#serial">シリアル通信</a>
+    <a href="#espnow">ESP-NOW通信</a>
     <a href="#future">今後の予定</a>
 </div>
 
 <div class="container">
     <h1 id="overview">M5Atom S3R & Arduino Uno R4 Minima - Magnetic Sensor & Servo Control</h1>
     <h2>概要</h2>
-    <p>M5Atom S3R と Arduino Uno R4 Minima を使用し、磁気センサーのデータをシリアル通信で送信し、サーボモーターを制御するプロジェクトです。</p>
+    <p>M5Atom S3R と Arduino Uno R4 Minima を使用し、磁気センサーのデータを送信し、サーボモーターを制御するプロジェクトです。通信方法として「シリアル通信」と「ESP-NOW通信」の2種類があります。</p>
 
     <h2 id="hardware">使用ハードウェア</h2>
     <ul>
@@ -102,6 +104,26 @@
     <h2 id="controller">コントローラの向き</h2>
     <p><img src="IMG_2422.jpg" alt="コントローラの向き" style="max-width: 100%;"></p>
     <p>あれ、、場合によっては違うな、、、</p>
+
+    <h2 id="serial">シリアル通信</h2>
+    <p>M5Atom S3R から磁気センサーのデータをシリアル通信で送信し、Arduino Uno R4 Minima 側で受信してサーボモーターを制御します。</p>
+    <p>使用するシリアル通信の設定例:</p>
+    <pre>
+    Serial.begin(115200);  // ボーレート 115200bps
+    Serial.print("磁気センサーの値: ");
+    Serial.println(sensorValue);
+    </pre>
+
+    <h2 id="espnow">ESP-NOW通信</h2>
+    <p>ESP-NOW を使い、M5Atom S3R から Arduino Uno R4 Minima にワイヤレスでデータを送信し、サーボモーターを制御します。</p>
+    <p>ESP-NOW の初期設定例:</p>
+    <pre>
+    if (esp_now_init() != ESP_OK) {
+        Serial.println("ESP-NOW 初期化に失敗しました");
+        return;
+    }
+    </pre>
+    <p>Arduino Uno R4 Minima 側で受信したデータをサーボ制御に使用します。</p>
 
     <h2 id="future">今後の予定</h2>
     <ul>
