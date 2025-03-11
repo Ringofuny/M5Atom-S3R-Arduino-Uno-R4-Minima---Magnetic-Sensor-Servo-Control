@@ -1,27 +1,31 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include <Wire.h>
-// #include "M5Unified.h"
 #include "M5AtomS3.h"
-#include "angle.h"
+#include "data_recovery.h"
+
+data_recovery recovery;
+RECEIVE_DATA received;
+
+int fail = 0;
 
 // ターゲット（フィギュアスタンド）の MAC address
 uint8_t targetAddress[] = {0x34, 0xB7, 0xDA, 0x57, 0x39, 0xD4};
 
-typedef struct GATIsendData {
-  float X;
-  float Y;
-  float Z;
+typedef struct SendData {
+  int16_t X;
+  int16_t Y;
+  int16_t Z;
 } GATIsendData;
 
 struct MAGData {
-  float x;
-  float y;
-  float z;
+  int16_t x;
+  int16_t y;
+  int16_t z;
 };
 
 MAGData mag;
-GATIsendData send;
+SendData send;
 
 // ピア（送信先）の情報を保持するための変数
 esp_now_peer_info_t peerInfo;
@@ -35,6 +39,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
+  Serial1.begin(38400, SERIAL_8N1, 6, 5);  // (RX, TX)
   Serial.println("serial started");
   
   // Set device as a Wi-Fi Station
@@ -42,10 +47,7 @@ void setup() {
   Serial.println("wifi");
   
   // M5Stack初期化
-  AtomS3.begin();
-  AtomS3.Imu.init();
-  // M5.Imu.begin();
-  Serial.println("M5Stack initialized");
+  // Serial.println("M5Stack initialized");
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
@@ -73,15 +75,17 @@ void setup() {
 }
 
 void loop() {
-  if (AtomS3.Imu.isEnabled()) {
-    AtomS3.Imu.getMag(&mag.x, &mag.y, &mag.z); // 磁気データ取得
-    send.X = mag.x;
-    send.Y = mag.y;
-    send.Z = mag.z;
+  bool update_state = recovery.getRecoveryData(&received.mag.x, &received.mag.y, &received.mag.z);
+  if (update_state) {
+    fail = 0;
+    send.X = received.mag.x;
+    send.Y = received.mag.y;
+    send.Z = received.mag.z;
     // Send message via ESP-NOW
-  } else {
-    Serial.println("IMU is not enabled");
-  }
+  }  else {
+    fail++;
+  } 
+  if (fail > 10) Serial.println("fail");
   
   Serial.print("Sending: ");
   Serial.print(send.X);
@@ -89,7 +93,7 @@ void loop() {
   Serial.print(send.Y);
   Serial.print(" ");
   Serial.print(send.Z);
-  Serial.println(" ");
+  Serial.print(" ");
   esp_err_t result = esp_now_send(targetAddress, (uint8_t *) &send, sizeof(send));
   
   if (result == ESP_OK) {
@@ -98,5 +102,5 @@ void loop() {
   else {
     Serial.println("Error sending the data");
   }
-  delay(100);
+  // delay(100);
 }
