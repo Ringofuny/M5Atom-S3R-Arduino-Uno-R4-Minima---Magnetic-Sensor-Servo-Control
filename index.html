@@ -29,6 +29,7 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            z-index: 1001;
         }
         .sidebar {
             position: fixed;
@@ -40,6 +41,7 @@
             color: white;
             padding-top: 20px;
             transition: 0.3s;
+            z-index: 1000;
         }
         .sidebar a {
             display: block;
@@ -53,11 +55,26 @@
         .sidebar.show {
             left: 0;
         }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .overlay.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
 
 <button class="menu-button" onclick="toggleMenu()">☰ 目次</button>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="sidebar" id="sidebar">
     <a href="#overview">概要</a>
@@ -107,7 +124,6 @@
 
     <h2 id="serial">シリアル通信</h2>
     <p>M5Atom S3R から磁気センサーのデータをシリアル通信で送信し、Arduino Uno R4 Minima 側で受信してサーボモーターを制御します。</p>
-    <p>使用するシリアル通信の設定例:</p>
     <pre>
     Serial.begin(115200);  // ボーレート 115200bps
     Serial.print("磁気センサーの値: ");
@@ -116,14 +132,12 @@
 
     <h2 id="espnow">ESP-NOW通信</h2>
     <p>ESP-NOW を使い、M5Atom S3R から Arduino Uno R4 Minima にワイヤレスでデータを送信し、サーボモーターを制御します。</p>
-    <p>ESP-NOW の初期設定例:</p>
     <pre>
     if (esp_now_init() != ESP_OK) {
         Serial.println("ESP-NOW 初期化に失敗しました");
         return;
     }
     </pre>
-    <p>Arduino Uno R4 Minima 側で受信したデータをサーボ制御に使用します。</p>
 
     <h2 id="future">今後の予定</h2>
     <ul>
@@ -135,7 +149,9 @@
 <script>
     function toggleMenu() {
         var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
         sidebar.classList.toggle("show");
+        overlay.classList.toggle("show");
     }
 </script>
 
