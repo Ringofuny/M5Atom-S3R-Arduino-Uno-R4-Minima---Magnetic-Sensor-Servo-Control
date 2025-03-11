@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M5Atom S3R & Arduino Uno R4 Minima - Magnetic Sensor & Servo Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .menu-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: #444;
+            color: white;
+            padding-top: 20px;
+            transition: 0.3s;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background: #666;
+        }
+        .sidebar.show {
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+
+<button class="menu-button" onclick="toggleMenu()">☰ 目次</button>
+
+<div class="sidebar" id="sidebar">
+    <a href="#overview">概要</a>
+    <a href="#hardware">使用ハードウェア</a>
+    <a href="#library">使用ライブラリ</a>
+    <a href="#reference">参考</a>
+    <a href="#install">インストール & 使い方</a>
+    <a href="#controller">コントローラの向き</a>
+    <a href="#future">今後の予定</a>
+</div>
+
+<div class="container">
+    <h1 id="overview">M5Atom S3R & Arduino Uno R4 Minima - Magnetic Sensor & Servo Control</h1>
+    <h2>概要</h2>
+    <p>M5Atom S3R と Arduino Uno R4 Minima を使用し、磁気センサーのデータをシリアル通信で送信し、サーボモーターを制御するプロジェクトです。</p>
+
+    <h2 id="hardware">使用ハードウェア</h2>
+    <ul>
+        <li>M5Atom S3R CAM</li>
+        <li>Arduino Uno R4 Minima</li>
+        <li>サーボモーター （追加予定）</li>
+    </ul>
+
+    <h2 id="library">使用ライブラリ</h2>
+    <ul>
+        <li><a href="https://github.com/m5stack/M5Unified" target="_blank">M5Unified</a></li>
+        <li><a href="https://github.com/arduino-libraries/Servo.git" target="_blank">Servo</a></li>
+    </ul>
+
+    <h2 id="reference">参考</h2>
+    <ul>
+        <li><a href="https://github.com/RoboTakao/NX22.git" target="_blank">servoの動きに関して</a></li>
+    </ul>
+
+    <h2 id="install">インストール & 使い方</h2>
+    <ol>
+        <li>必要なライブラリをインストール</li>
+        <li>M5Atom S3R にコードを書き込み、磁気センサーのデータを送信</li>
+        <li>Arduino Uno R4 Minima にコードを書き込み、受信データでサーボモーターを制御</li>
+    </ol>
+
+    <h2 id="controller">コントローラの向き</h2>
+    <p><img src="IMG_2422.jpg" alt="コントローラの向き" style="max-width: 100%;"></p>
+    <p>あれ、、場合によっては違うな、、、</p>
+
+    <h2 id="future">今後の予定</h2>
+    <ul>
+        <li>新機能の追加</li>
+        <li>コードの最適化</li>
+    </ul>
+</div>
+
+<script>
+    function toggleMenu() {
+        var sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("show");
+    }
+</script>
+
+</body>
+</html>
