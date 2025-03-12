@@ -34,6 +34,8 @@ esp_now_peer_info_t peerInfo;
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+  Serial1.write(0x4F);
+  Serial1.write(0x4B);
 }
 
 void setup() {
@@ -81,13 +83,14 @@ void loop() {
     send.X = received.mag.x;
     send.Y = received.mag.y;
     send.Z = received.mag.z;
-    Serial1.write('O');
-    Serial1.write('K');
     // Send message via ESP-NOW
   }  else {
     fail++;
   } 
-  if (fail > 10) Serial.println("fail");
+  if (fail > 10) {
+    Serial.println("fail");
+    Serial1.write(0xFE);
+  }
   
   Serial.print("Sending: ");
   Serial.print(send.X);

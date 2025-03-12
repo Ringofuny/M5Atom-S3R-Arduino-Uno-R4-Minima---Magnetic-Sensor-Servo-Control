@@ -1,5 +1,3 @@
-// ESP-NowはArduinoIDEのボードマネージャで "esp32 by espressif" を
-// 入れておけば以下の2つのヘッダファイルをインクルードするだけで使用可能だよ。
 #include <esp_now.h>
 #include <WiFi.h>
 #include "M5Unified.h"
